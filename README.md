@@ -1,10 +1,10 @@
-# Azure Event-Driven Reference Architecture
+# Azure IoT Telemetry Reference Architecture
 
-A professional, production-ready **reference architecture** and **template codebase** for building event-driven applications on **Microsoft Azure** using:
+A professional, production-ready **reference architecture** and **template codebase** for building **IoT telemetry solutions** on **Microsoft Azure** using:
 
 - **Azure Container Apps (ACA)** – for microservices and APIs
 - **Azure Event Grid** – for event routing (CloudEvents 1.0)
-- **Azure Data Lake Storage Gen2 (ADLS)** – for raw/bronze/silver/gold data layers
+- **Azure Data Lake Storage Gen2 (ADLS)** – for raw/bronze/silver/gold telemetry data
 - **Azure Synapse Analytics** – for pipelines, SQL, and notebooks
 - **Microsoft Fabric (optional)** – for lakehouse, semantic models, and reports
 - **Azure Key Vault, Log Analytics, App Insights** – for security and observability
@@ -25,27 +25,28 @@ This repository provides:
 @startuml
 !include <C4/C4_Context.puml>
 
-Person(dev, "Developer/Operator")
+Person(dev, "IoT Developer/Operator")
 Person(user, "Business User / Analyst")
-System_Boundary(sys, "Azure Reference Solution") {
-  System(web, "Containerized APIs (ACA)", "Public/Private APIs")
+System_Boundary(sys, "Azure IoT Telemetry Solution") {
+  System(devices, "IoT Devices", "Sensors publishing telemetry")
+  System(api, "IoT Gateway API (ACA)", "Ingests device telemetry")
   System(eventgrid, "Event Grid", "Event router (CloudEvents)")
-  System(adls, "Data Lake (ADLS Gen2)", "Raw/Bronze/Silver/Gold")
+  System(adls, "Data Lake (ADLS Gen2)", "Raw/Bronze/Silver/Gold telemetry data")
   System(syn, "Synapse Workspace", "ETL/Pipelines/SQL pool/Notebooks")
   System(fabric, "Microsoft Fabric", "Lakehouse + Reports (optional)")
   System(kv, "Key Vault", "Secrets, keys")
   System(mon, "Monitoring", "Log Analytics + App Insights")
 }
 
-Rel(dev, web, "Deploy CI/CD, observe")
-Rel(web, eventgrid, "Publish/Subscribe events")
-Rel(eventgrid, adls, "Event-driven landings (via Functions/ACA workers)")
+Rel(devices, api, "Send telemetry")
+Rel(api, eventgrid, "Publish telemetry events")
+Rel(eventgrid, adls, "Trigger ingestion to Data Lake")
 Rel(adls, syn, "Batch/stream processing")
 Rel(syn, fabric, "Model & publish datasets/reports")
 Rel(dev, syn, "Manage pipelines")
-Rel(user, fabric, "Consume dashboards")
-Rel(web, kv, "Get secrets via MSI")
-Rel(web, mon, "Logs/metrics/traces")
+Rel(user, fabric, "Consume IoT dashboards")
+Rel(api, kv, "Get secrets via MSI")
+Rel(api, mon, "Logs/metrics/traces")
 @enduml
 ```
 
@@ -54,27 +55,28 @@ Rel(web, mon, "Logs/metrics/traces")
 @startuml
 !include <C4/C4_Container.puml>
 System_Boundary(aca, "Azure Container Apps Env") {
-  Container(api, "Gateway/API", ".NET 9", "Public entry, JWT auth")
-  Container(svc_ingest, "Ingest Service", ".NET 9 worker", "Validates & emits CloudEvents")
-  Container(svc_proc, "Processor Service", ".NET 9 worker", "Consumes events, writes to ADLS")
-  Container(svc_notify, "Notifier", ".NET 9", "Subscribes to Event Grid; sends webhooks/email")
+  Container(api, "IoT Gateway/API", ".NET 9", "Receives telemetry via HTTP/MQTT, JWT auth")
+  Container(svc_ingest, "Telemetry Ingestor", ".NET 9 worker", "Validates telemetry, emits CloudEvents")
+  Container(svc_proc, "Telemetry Processor", ".NET 9 worker", "Consumes telemetry, writes to ADLS")
+  Container(svc_alert, "Alert Service", ".NET 9 worker", "Subscribes to Event Grid; triggers alerts")
 }
-ContainerDb(storage, "ADLS Gen2", "Azure Storage", "Raw/Bronze/Silver/Gold zones")
+ContainerDb(storage, "ADLS Gen2", "Azure Storage", "Telemetry data: Raw/Bronze/Silver/Gold")
 Container(eventgrid, "Event Grid", "Topic/Subscriptions", "CloudEvents 1.0")
 Container(kv, "Key Vault", "Secrets/Keys")
 Container(syn, "Synapse", "Pipelines/SQL")
 Container(fabric, "Fabric", "Lakehouse/Reports (optional)")
 Container(log, "Log Analytics + App Insights", "Observability")
 
-Rel(api, svc_ingest, "HTTP/REST")
-Rel(svc_ingest, eventgrid, "Publish events")
-Rel(eventgrid, svc_proc, "Push (webhook) / pull (event handler)")
+Rel(api, svc_ingest, "Telemetry HTTP/MQTT → Worker")
+Rel(svc_ingest, eventgrid, "Publish telemetry events")
+Rel(eventgrid, svc_proc, "Push telemetry events")
 Rel(svc_proc, storage, "ADLS writes via MSI")
 Rel(storage, syn, "ETL")
 Rel(syn, fabric, "Datasets")
 Rel(api, kv, "MSI -> Secrets")
 Rel(svc_ingest, log, "Logs/Traces")
 Rel(svc_proc, log, "Logs/Traces")
+Rel(svc_alert, log, "Logs/Traces")
 @enduml
 ```
 
@@ -82,11 +84,11 @@ Rel(svc_proc, log, "Logs/Traces")
 
 ## 🚀 Features
 
-- **Event-driven ingestion** with CloudEvents standard
-- **Secure microservices** via Entra ID + Managed Identity
+- **IoT telemetry ingestion** with CloudEvents standard
+- **Secure IoT microservices** via Entra ID + Managed Identity
 - **Observability**: OpenTelemetry + App Insights + Log Analytics
-- **Data Lake zones**: raw → bronze → silver → gold
-- **Analytics-ready**: Synapse pipelines and optional Fabric dashboards
+- **Data Lake zones**: raw → bronze → silver → gold for telemetry
+- **Analytics-ready**: Synapse pipelines and optional Fabric IoT dashboards
 - **IaC-first**: Terraform modules for ACA, Event Grid, ADLS, Synapse, Key Vault, Monitoring
 - **CI/CD pipelines**: GitHub Actions for infra + apps
 - **Cost-aware**: autoscale ACA (minScale=0 workers), Synapse pause, storage lifecycle policies
@@ -95,7 +97,7 @@ Rel(svc_proc, log, "Logs/Traces")
 
 ## 📂 Repository Structure
 ```
-azure-event-driven-reference-architecture/
+azure-iot-telemetry-reference-architecture/
 ├─ docs/
 │  ├─ architecture.md
 │  ├─ security.md
@@ -107,10 +109,10 @@ azure-event-driven-reference-architecture/
 │  │  └─ modules/
 │  └─ bicep/
 ├─ src/
-│  ├─ gateway-api/           # .NET 9 Minimal API
-│  ├─ svc-ingest/            # Worker publishes CloudEvents
-│  ├─ svc-processor/         # Worker consumes → ADLS
-│  └─ svc-notifier/          # Example subscriber
+│  ├─ gateway-api/           # .NET 9 Minimal API for IoT devices
+│  ├─ telemetry-ingestor/    # Worker publishes telemetry events
+│  ├─ telemetry-processor/   # Worker consumes telemetry → ADLS
+│  └─ alert-service/         # Example subscriber (alerts)
 ├─ data/
 │  ├─ synapse/
 │  └─ fabric/
@@ -135,7 +137,7 @@ azure-event-driven-reference-architecture/
 
 ## 📊 Observability
 - **App Insights + OpenTelemetry** for tracing
-- **Log Analytics** workspace with KQL queries
+- **Log Analytics** workspace with KQL queries for IoT telemetry
 - Pre-built dashboards in `/docs/operations.md`
 
 ---
@@ -157,9 +159,8 @@ az acr build --registry <acr_name> --image gateway:latest .
 ---
 
 ## 📈 Roadmap
-- [ ] Add IoT Telemetry domain pack
 - [ ] Add EDI Processing domain pack
-- [ ] Add Fabric Lakehouse starter
+- [ ] Add Fabric IoT Lakehouse starter
 - [ ] Blue/green ACA revisions switcher
 - [ ] Chaos testing module
 
