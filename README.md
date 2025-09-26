@@ -11,7 +11,7 @@ A professional, production-ready **reference architecture** and **template codeb
 
 This repository provides:
 - Infrastructure as Code (**Terraform** modules, Bicep optional)
-- .NET 9 sample services (Minimal API, Workers, CloudEvents integration)
+- .NET 9 samplex services (Minimal API, Workers, CloudEvents integration)
 - CI/CD pipelines with **GitHub Actions**
 - Security and cost-optimization best practices
 - C4 diagrams and architecture documentation
