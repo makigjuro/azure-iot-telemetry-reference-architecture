@@ -1,0 +1,29 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(dev, "IoT Developer/Operator")
+Person(user, "Business User / Analyst")
+System_Boundary(sys, "Azure IoT Telemetry Solution") {
+    System(devices, "IoT Devices", "Sensors publishing telemetry")
+    System(api, "IoT Gateway API (ACA)", "Ingests device telemetry")
+    System(eventgrid, "Event Grid", "Event router (CloudEvents)")
+    System(adls, "Data Lake (ADLS Gen2)", "Raw/Bronze/Silver/Gold telemetry data")
+    System(syn, "Synapse Workspace", "ETL/Pipelines/SQL pool/Notebooks")
+    System(fabric, "Microsoft Fabric", "Lakehouse + Reports (optional)")
+    System(kv, "Key Vault", "Secrets, keys")
+    System(mon, "Monitoring", "Log Analytics + App Insights")
+}
+
+
+Rel(devices, api, "Send telemetry")
+Rel(api, eventgrid, "Publish telemetry events")
+Rel(eventgrid, adls, "Trigger ingestion to Data Lake")
+Rel(adls, syn, "Batch/stream processing")
+Rel(syn, fabric, "Model & publish datasets/reports")
+Rel(dev, syn, "Manage pipelines")
+Rel(user, fabric, "Consume IoT dashboards")
+Rel(api, kv, "Get secrets via MSI")
+Rel(api, mon, "Logs/metrics/traces")
+@enduml

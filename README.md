@@ -21,64 +21,12 @@ This repository provides:
 ## 📐 Architecture Overview
 
 ### C1: System Context Diagram
-```plantuml
-@startuml
-!include <C4/C4_Context.puml>
 
-Person(dev, "IoT Developer/Operator")
-Person(user, "Business User / Analyst")
-System_Boundary(sys, "Azure IoT Telemetry Solution") {
-  System(devices, "IoT Devices", "Sensors publishing telemetry")
-  System(api, "IoT Gateway API (ACA)", "Ingests device telemetry")
-  System(eventgrid, "Event Grid", "Event router (CloudEvents)")
-  System(adls, "Data Lake (ADLS Gen2)", "Raw/Bronze/Silver/Gold telemetry data")
-  System(syn, "Synapse Workspace", "ETL/Pipelines/SQL pool/Notebooks")
-  System(fabric, "Microsoft Fabric", "Lakehouse + Reports (optional)")
-  System(kv, "Key Vault", "Secrets, keys")
-  System(mon, "Monitoring", "Log Analytics + App Insights")
-}
-
-Rel(devices, api, "Send telemetry")
-Rel(api, eventgrid, "Publish telemetry events")
-Rel(eventgrid, adls, "Trigger ingestion to Data Lake")
-Rel(adls, syn, "Batch/stream processing")
-Rel(syn, fabric, "Model & publish datasets/reports")
-Rel(dev, syn, "Manage pipelines")
-Rel(user, fabric, "Consume IoT dashboards")
-Rel(api, kv, "Get secrets via MSI")
-Rel(api, mon, "Logs/metrics/traces")
-@enduml
-```
+![C1 System Context](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/makigjuro/azure-iot-telemetry-reference-architecture/main/docs/architecture-c1-diagram.puml)
 
 ### C2: Container Diagram
-```plantuml
-@startuml
-!include <C4/C4_Container.puml>
-System_Boundary(aca, "Azure Container Apps Env") {
-  Container(api, "IoT Gateway/API", ".NET 9", "Receives telemetry via HTTP/MQTT, JWT auth")
-  Container(svc_ingest, "Telemetry Ingestor", ".NET 9 worker", "Validates telemetry, emits CloudEvents")
-  Container(svc_proc, "Telemetry Processor", ".NET 9 worker", "Consumes telemetry, writes to ADLS")
-  Container(svc_alert, "Alert Service", ".NET 9 worker", "Subscribes to Event Grid; triggers alerts")
-}
-ContainerDb(storage, "ADLS Gen2", "Azure Storage", "Telemetry data: Raw/Bronze/Silver/Gold")
-Container(eventgrid, "Event Grid", "Topic/Subscriptions", "CloudEvents 1.0")
-Container(kv, "Key Vault", "Secrets/Keys")
-Container(syn, "Synapse", "Pipelines/SQL")
-Container(fabric, "Fabric", "Lakehouse/Reports (optional)")
-Container(log, "Log Analytics + App Insights", "Observability")
 
-Rel(api, svc_ingest, "Telemetry HTTP/MQTT → Worker")
-Rel(svc_ingest, eventgrid, "Publish telemetry events")
-Rel(eventgrid, svc_proc, "Push telemetry events")
-Rel(svc_proc, storage, "ADLS writes via MSI")
-Rel(storage, syn, "ETL")
-Rel(syn, fabric, "Datasets")
-Rel(api, kv, "MSI -> Secrets")
-Rel(svc_ingest, log, "Logs/Traces")
-Rel(svc_proc, log, "Logs/Traces")
-Rel(svc_alert, log, "Logs/Traces")
-@enduml
-```
+![C2 Container Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/makigjuro/azure-iot-telemetry-reference-architecture/main/docs/architecture-c2-diagram.puml)
 
 ---
 
