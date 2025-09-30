@@ -5,25 +5,66 @@ LAYOUT_WITH_LEGEND()
 
 Person(dev, "IoT Developer/Operator")
 Person(user, "Business User / Analyst")
+
+System_Boundary(edge, "Edge/On-Premises") {
+    System(devices, "IoT Devices", "Sensors with MQTT/AMQP")
+    System(iotedge, "IoT Edge Gateway", "Local processing & offline support")
+}
+
 System_Boundary(sys, "Azure IoT Telemetry Solution") {
-    System(devices, "IoT Devices", "Sensors publishing telemetry")
-    System(api, "IoT Gateway API (ACA)", "Ingests device telemetry")
+    System(iothub, "Azure IoT Hub", "Device registry, D2C/C2D, device twins")
+    System(dps, "Device Provisioning Service", "Zero-touch device provisioning")
+    System(digitwin, "Azure Digital Twins", "DTDL device models")
+    System(eventhub, "Event Hubs", "Telemetry streaming")
+    System(stream, "Stream Analytics", "Real-time hot path processing")
+    System(aca, "Container Apps", "Worker services & APIs")
     System(eventgrid, "Event Grid", "Event router (CloudEvents)")
-    System(adls, "Data Lake (ADLS Gen2)", "Raw/Bronze/Silver/Gold telemetry data")
-    System(syn, "Synapse Workspace", "ETL/Pipelines/SQL pool/Notebooks")
-    System(fabric, "Microsoft Fabric", "Lakehouse + Reports (optional)")
-    System(kv, "Key Vault", "Secrets, keys")
+    System(adls, "Data Lake (ADLS Gen2)", "Raw/Bronze/Silver/Gold zones")
+    System(postgres, "PostgreSQL", "Device metadata & app data")
+    System(syn, "Synapse Analytics", "ETL/Pipelines/SQL pool/Notebooks")
+    System(fabric, "Microsoft Fabric", "Lakehouse + Power BI reports")
+    System(kv, "Key Vault", "Secrets, certificates, keys")
     System(mon, "Monitoring", "Log Analytics + App Insights")
 }
 
+' Device connectivity & provisioning
+Rel(devices, iotedge, "Send telemetry via MQTT/AMQP")
+Rel(devices, iothub, "Direct connection")
+Rel(iotedge, iothub, "Forward telemetry")
+Rel(dps, iothub, "Auto-provision devices")
+Rel(iothub, digitwin, "Update device twins")
 
-Rel(devices, api, "Send telemetry")
-Rel(api, eventgrid, "Publish telemetry events")
-Rel(eventgrid, adls, "Trigger ingestion to Data Lake")
-Rel(adls, syn, "Batch/stream processing")
-Rel(syn, fabric, "Model & publish datasets/reports")
+' Telemetry ingestion
+Rel(iothub, eventhub, "Built-in Event Hub endpoint")
+Rel(iothub, eventgrid, "Device lifecycle events")
+
+' Hot path (real-time)
+Rel(eventhub, stream, "Real-time stream")
+Rel(stream, aca, "Real-time alerts")
+Rel(stream, adls, "Hot path storage")
+
+' Cold path (batch)
+Rel(eventhub, aca, "Batch consumption")
+Rel(aca, adls, "Write to Data Lake")
+Rel(aca, postgres, "Store metadata")
+Rel(eventgrid, aca, "Trigger workflows")
+
+' Analytics
+Rel(adls, syn, "Batch processing")
+Rel(digitwin, syn, "Device context")
+Rel(syn, fabric, "Publish datasets/reports")
+
+' Security & Monitoring
+Rel(aca, kv, "Get secrets via MSI")
+Rel(iothub, kv, "Get certificates")
+Rel(iothub, mon, "Device connection logs")
+Rel(aca, mon, "Logs/metrics/traces")
+Rel(stream, mon, "Job metrics")
+
+' User interactions
+Rel(dev, iothub, "Manage devices")
 Rel(dev, syn, "Manage pipelines")
+Rel(dev, aca, "Deploy services")
 Rel(user, fabric, "Consume IoT dashboards")
-Rel(api, kv, "Get secrets via MSI")
-Rel(api, mon, "Logs/metrics/traces")
+
 @enduml
