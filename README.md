@@ -26,13 +26,15 @@ This repository provides:
 
 ## 📐 Architecture Overview
 
-### Infrastructure Diagram (Detailed Technical View)
+### Infrastructure Diagram (with Official Azure Icons)
 
-Complete infrastructure diagram with private endpoints, managed identities, VNet topology, and RBAC assignments.
+Complete infrastructure diagram with private endpoints, managed identities, VNet topology, and RBAC assignments using **official Azure service icons**.
 
-📊 **[View Interactive Diagram](docs/infrastructure-diagram.mmd)** | 📄 **[Full Documentation with Data Flows & RBAC →](docs/infrastructure-diagram.md)**
+![Azure IoT Architecture](docs/architecture_diagram.png)
 
-![Infrastructure Diagram](docs/infrastructure-diagram.mmd)
+📄 **[View detailed documentation with data flows and RBAC assignments →](docs/infrastructure-diagram.md)** | 📊 **[Mermaid version](docs/infrastructure-diagram.mmd)**
+
+> **Note**: This diagram is generated using the [Python Diagrams](https://diagrams.mingrammer.com/) library with official Azure icons. To regenerate: `python3 docs/generate_diagram.py`
 
 ### C1: System Context Diagram
 
@@ -83,8 +85,12 @@ Complete infrastructure diagram with private endpoints, managed identities, VNet
 ```
 azure-iot-telemetry-reference-architecture/
 ├─ docs/
-│  ├─ infrastructure-diagram.md   # Detailed Azure infrastructure diagram
-│  ├─ architecture-c1-diagram.puml
+│  ├─ architecture_diagram.png         # Infrastructure diagram with Azure icons
+│  ├─ generate_diagram.py              # Python script to regenerate diagram
+│  ├─ infrastructure-diagram.md        # Detailed documentation (data flows, RBAC)
+│  ├─ infrastructure-diagram.mmd       # Mermaid version for GitHub rendering
+│  ├─ architecture-c1-diagram.puml     # C4 System Context (PlantUML)
+│  ├─ README-diagrams.md               # Guide to diagram formats
 │  ├─ architecture.md
 │  ├─ security.md
 │  ├─ operations.md
