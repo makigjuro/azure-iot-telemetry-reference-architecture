@@ -139,19 +139,31 @@ azure-iot-telemetry-reference-architecture/
 
 ---
 
-## 🛠️ Quickstart
+## Getting Started
+
+### Documentation
+
+| Guide | Description |
+|-------|-------------|
+| [Prerequisites](infra/terraform/PREREQUISITES.md) | Azure subscription, tools, permissions, quotas |
+| [Quick Start](infra/terraform/QUICK_START.md) | Deploy full architecture in ~30 minutes |
+| [Cookbook](infra/terraform/COOKBOOK.md) | Step-by-step recipes for common tasks |
+| [Deployment Guide](infra/terraform/envs/dev/DEPLOYMENT_GUIDE.md) | Detailed deployment options and troubleshooting |
+| [Terraform Overview](infra/terraform/README.md) | Module documentation and architecture details |
+
+### Quick Deploy
+
 ```bash
-# Deploy infrastructure (dev environment)
 cd infra/terraform/envs/dev
+cp terraform.tfvars.example terraform.tfvars
+# Edit terraform.tfvars and set postgres_admin_password
 terraform init
 terraform apply
-
-# Build and push images
-cd src/gateway-api
-az acr build --registry <acr_name> --image gateway:latest .
-
-# Deploy apps via GitHub Actions or Terraform
 ```
+
+Deploys ~70-80 Azure resources in 20-30 minutes. Estimated cost: $219/mo ($138/mo with Stream Analytics paused).
+
+For staged deployment or troubleshooting, see the [Deployment Guide](infra/terraform/envs/dev/DEPLOYMENT_GUIDE.md).
 
 
 ## 📄 License
