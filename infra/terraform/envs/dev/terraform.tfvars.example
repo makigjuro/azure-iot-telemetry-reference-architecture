@@ -1,0 +1,21 @@
+# Example Terraform Variables for Dev Environment
+# Copy this file to terraform.tfvars and customize
+
+# =============================================================================
+# AZURE REGION
+# =============================================================================
+location = "eastus"  # Recommended: eastus, westus2, or northeurope (cheapest)
+
+# =============================================================================
+# DATABASE CREDENTIALS
+# =============================================================================
+postgres_admin_username = "psqladmin"
+postgres_admin_password = "YourSecurePassword123!"  # Change this!
+
+# =============================================================================
+# CONTAINER IMAGES (Optional - Phase 2)
+# =============================================================================
+# Use default Microsoft sample images for now
+# telemetry_processor_image = "youracr.azurecr.io/telemetry-processor:latest"
+# alert_handler_image       = "youracr.azurecr.io/alert-handler:latest"
+# event_subscriber_image    = "youracr.azurecr.io/event-subscriber:latest"
