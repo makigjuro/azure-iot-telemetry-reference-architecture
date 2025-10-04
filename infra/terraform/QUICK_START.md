@@ -172,28 +172,9 @@ terraform init
 
 ---
 
-## Next Steps
-
-1. ✅ **Review DEPLOYMENT_GUIDE.md** - Detailed deployment options
-2. ✅ **Check INTEGRATION_COMPLETE.md** - Architecture details
-3. ✅ **Start Phase 2** - Build .NET 9 microservices
-4. ✅ **Test workflows** - Device telemetry + command/control
-
----
-
 ## Need Help?
 
-- 📖 **Detailed Guide:** See `DEPLOYMENT_GUIDE.md`
-- 🏗️ **Architecture:** See `INTEGRATION_COMPLETE.md`
-- 💰 **Costs:** See `README.md`
-- 🐛 **Issues:** Check Azure Activity Log
-
----
-
-**Ready to deploy? Let's go!** 🚀
-
-```bash
-cd infra/terraform/envs/dev
-terraform init
-terraform apply
-```
+- [Deployment Guide](envs/dev/DEPLOYMENT_GUIDE.md) - Detailed deployment options and troubleshooting
+- [Cookbook](COOKBOOK.md) - Step-by-step recipes for common tasks
+- [Terraform Overview](README.md) - Module documentation and cost details
+- [Prerequisites](PREREQUISITES.md) - Setup requirements

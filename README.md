@@ -36,10 +36,6 @@ Complete infrastructure diagram with private endpoints, managed identities, VNet
 
 > **Note**: This diagram is generated using the [Python Diagrams](https://diagrams.mingrammer.com/) library with official Azure icons. To regenerate: `python3 docs/generate_diagram.py`
 
-### C1: System Context Diagram
-
-![C1 System Context](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/makigjuro/azure-iot-telemetry-reference-architecture/main/docs/architecture-c1-diagram.puml)
-
 ---
 
 ## Features
@@ -86,8 +82,7 @@ Complete infrastructure diagram with private endpoints, managed identities, VNet
 ```
 ├── docs/                    # Architecture diagrams and documentation
 │   ├── architecture_diagram.png
-│   ├── infrastructure-diagram.md
-│   └── architecture-c1-diagram.puml
+│   └── infrastructure-diagram.md
 ├── infra/terraform/         # Infrastructure as Code
 │   ├── envs/dev/           # Dev environment (main.tf, variables.tf, outputs.tf)
 │   └── modules/            # 11 reusable modules (networking, iot-hub, etc.)
