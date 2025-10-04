@@ -26,9 +26,7 @@ resource "azurerm_postgresql_flexible_server" "main" {
   geo_redundant_backup_enabled = false  # Disabled for cost savings
 
   # High availability (disabled for dev to save cost)
-  high_availability {
-    mode = "Disabled"
-  }
+  # Note: Omit high_availability block entirely to disable
 
   # Maintenance window
   maintenance_window {

@@ -19,16 +19,6 @@ variable "enable_public_access" {
   default     = true
 }
 
-variable "iothub_id" {
-  description = "IoT Hub resource ID for Event Grid system topic"
-  type        = string
-}
-
-variable "storage_account_id" {
-  description = "Storage account ID for Event Grid queue endpoint"
-  type        = string
-}
-
 variable "key_vault_id" {
   description = "Key Vault ID for storing connection strings"
   type        = string

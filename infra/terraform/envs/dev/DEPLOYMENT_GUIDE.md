@@ -184,15 +184,7 @@ terraform apply
 - ✅ ADLS Gen2 (~$15/mo)
 - ✅ Key Vault (~$1/mo)
 
-**What's NOT included:**
-- ❌ IoT Hub, DPS
-- ❌ Event Hubs, Event Grid
-- ❌ Stream Analytics
-- ❌ PostgreSQL
-- ❌ Digital Twins
-- ❌ Container Apps
 
----
 
 ## 🎬 Option C: Staged Deployment
 

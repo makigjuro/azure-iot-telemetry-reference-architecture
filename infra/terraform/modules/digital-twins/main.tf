@@ -36,13 +36,12 @@ resource "azurerm_digital_twins_endpoint_eventgrid" "twin_changes" {
 #   eventhub_namespace_endpoint_uri = var.eventhub_namespace_endpoint_uri
 # }
 
-# RBAC: Grant IoT Hub permission to update digital twins
-resource "azurerm_role_assignment" "iothub_to_dt" {
-  count                = var.iothub_principal_id != null ? 1 : 0
-  scope                = azurerm_digital_twins_instance.main.id
-  role_definition_name = "Azure Digital Twins Data Owner"
-  principal_id         = var.iothub_principal_id
-}
+# NOTE: RBAC assignment moved to RBAC module to avoid count dependency issues
+# resource "azurerm_role_assignment" "iothub_to_dt" {
+#   scope                = azurerm_digital_twins_instance.main.id
+#   role_definition_name = "Azure Digital Twins Data Owner"
+#   principal_id         = var.iothub_principal_id
+# }
 
 # Diagnostic settings
 resource "azurerm_monitor_diagnostic_setting" "digital_twins" {
