@@ -24,7 +24,7 @@ This repository provides:
 
 ---
 
-## 📐 Architecture Overview
+## Architecture Overview
 
 ### Infrastructure Diagram (with Official Azure Icons)
 
@@ -42,7 +42,7 @@ Complete infrastructure diagram with private endpoints, managed identities, VNet
 
 ---
 
-## 🚀 Features
+## Features
 
 ### IoT Device Management
 - **Device provisioning** with DPS (X.509 certificates, TPM, symmetric keys)
@@ -81,43 +81,29 @@ Complete infrastructure diagram with private endpoints, managed identities, VNet
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
+
 ```
-azure-iot-telemetry-reference-architecture/
-├─ docs/
-│  ├─ architecture_diagram.png         # Infrastructure diagram with Azure icons
-│  ├─ generate_diagram.py              # Python script to regenerate diagram
-│  ├─ infrastructure-diagram.md        # Detailed documentation (data flows, RBAC)
-│  ├─ infrastructure-diagram.mmd       # Mermaid version for GitHub rendering
-│  ├─ architecture-c1-diagram.puml     # C4 System Context (PlantUML)
-│  ├─ README-diagrams.md               # Guide to diagram formats
-│  ├─ architecture.md
-│  ├─ security.md
-│  ├─ operations.md
-│  └─ diagrams/
-├─ infra/
-│  ├─ terraform/
-│  │  ├─ envs/
-│  │  └─ modules/
-│  └─ bicep/
-├─ src/
-│  ├─ gateway-api/           # .NET 9 Minimal API for IoT devices
-│  ├─ telemetry-ingestor/    # Worker publishes telemetry events
-│  ├─ telemetry-processor/   # Worker consumes telemetry → ADLS
-│  └─ alert-service/         # Example subscriber (alerts)
-├─ data/
-│  ├─ synapse/
-│  └─ fabric/
-├─ .github/workflows/
-│  ├─ ci-build-test.yml
-│  ├─ cd-infra-terraform.yml
-│  └─ cd-apps-aca.yml
-└─ LICENSE
+├── docs/                    # Architecture diagrams and documentation
+│   ├── architecture_diagram.png
+│   ├── infrastructure-diagram.md
+│   └── architecture-c1-diagram.puml
+├── infra/terraform/         # Infrastructure as Code
+│   ├── envs/dev/           # Dev environment (main.tf, variables.tf, outputs.tf)
+│   └── modules/            # 11 reusable modules (networking, iot-hub, etc.)
+├── src/                     # .NET 9 microservices (Phase 2)
+│   ├── gateway-api/
+│   ├── telemetry-processor/
+│   └── alert-service/
+├── data/                    # Analytics pipelines (Phase 3)
+│   ├── synapse/
+│   └── fabric/
+└── .github/workflows/       # CI/CD pipelines
 ```
 
 ---
 
-## 🔒 Security Baseline
+## Security Baseline
 - **Device Authentication**: X.509 certificates or SAS tokens per device
 - **Zero public endpoints** for IoT Hub, Event Hubs, Storage, Synapse (private endpoints only)
 - **System-assigned Managed Identity** for all services (ACA, IoT Hub, Stream Analytics, Synapse)
@@ -132,7 +118,7 @@ azure-iot-telemetry-reference-architecture/
 
 ---
 
-## 📊 Observability
+## Observability
 - **App Insights + OpenTelemetry** for tracing
 - **Log Analytics** workspace with KQL queries for IoT telemetry
 - Pre-built dashboards in `/docs/operations.md`

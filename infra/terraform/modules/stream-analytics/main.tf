@@ -82,12 +82,11 @@ resource "azurerm_stream_analytics_stream_input_eventhub_v2" "iothub" {
   }
 }
 
-# Output 1: Alerts to Storage Queue (for Container Apps to pick up)
-# Note: Stream Analytics doesn't support direct output to Container Apps,
-# so we use Storage Queue as a bridge
+# Output 1: Alerts to Service Bus Queue (for Alert Handler Container App)
 resource "azurerm_stream_analytics_output_servicebus_queue" "alerts" {
   name                      = "alerts-output"
-  stream_analytics_job_id   = azurerm_stream_analytics_job.main.id
+  stream_analytics_job_name = azurerm_stream_analytics_job.main.name
+  resource_group_name       = var.resource_group_name
   queue_name                = "stream-alerts"
   servicebus_namespace      = var.servicebus_namespace_name
   shared_access_policy_key  = var.servicebus_shared_access_key
@@ -104,7 +103,8 @@ resource "azurerm_stream_analytics_output_servicebus_queue" "alerts" {
 # Output 2: Hot path data to ADLS
 resource "azurerm_stream_analytics_output_blob" "adls" {
   name                      = "adls-output"
-  stream_analytics_job_id   = azurerm_stream_analytics_job.main.id
+  stream_analytics_job_name = azurerm_stream_analytics_job.main.name
+  resource_group_name       = var.resource_group_name
   storage_account_name      = var.storage_account_name
   storage_container_name    = var.storage_container_hotpath
   path_pattern              = "hotpath/{date}/{time}"

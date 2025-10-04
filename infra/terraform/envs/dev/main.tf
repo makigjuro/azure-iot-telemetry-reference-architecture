@@ -117,10 +117,8 @@ module "event_streaming" {
   # Dev: allow public access
   enable_public_access = true
 
-  # IoT Hub will be created next, placeholder for now
-  iothub_id          = module.iot_hub.iothub_id
-  storage_account_id = module.storage.storage_account_id
-  key_vault_id       = module.security.key_vault_id
+  # Dependencies
+  key_vault_id = module.security.key_vault_id
 
   # Diagnostics
   enable_diagnostics         = true
@@ -285,6 +283,73 @@ module "container_apps" {
 }
 
 # =============================================================================
+# EVENT GRID SYSTEM TOPIC (Created after IoT Hub and Event Streaming)
+# =============================================================================
+
+# Event Grid System Topic for IoT Hub device lifecycle events
+resource "azurerm_eventgrid_system_topic" "iothub" {
+  name                   = "evgt-iothub-${local.naming_prefix}"
+  location               = azurerm_resource_group.main.location
+  resource_group_name    = azurerm_resource_group.main.name
+  source_arm_resource_id = module.iot_hub.iothub_id
+  topic_type             = "Microsoft.Devices.IoTHubs"
+
+  # System-assigned managed identity
+  identity {
+    type = "SystemAssigned"
+  }
+
+  tags = local.common_tags
+
+  depends_on = [module.iot_hub]
+}
+
+# Event Grid Subscription: Device Lifecycle Events → Storage Queue
+resource "azurerm_eventgrid_system_topic_event_subscription" "device_lifecycle" {
+  name                = "device-lifecycle"
+  system_topic        = azurerm_eventgrid_system_topic.iothub.name
+  resource_group_name = azurerm_resource_group.main.name
+
+  # Filter for device created/deleted/connected events
+  included_event_types = [
+    "Microsoft.Devices.DeviceCreated",
+    "Microsoft.Devices.DeviceDeleted",
+    "Microsoft.Devices.DeviceConnected",
+    "Microsoft.Devices.DeviceDisconnected"
+  ]
+
+  # Endpoint: Storage Queue
+  storage_queue_endpoint {
+    storage_account_id = module.storage.storage_account_id
+    queue_name         = "device-events"
+  }
+
+  retry_policy {
+    max_delivery_attempts = 10
+    event_time_to_live    = 1440  # 24 hours
+  }
+
+  depends_on = [module.storage, azurerm_eventgrid_system_topic.iothub]
+}
+
+# Diagnostic settings for Event Grid System Topic
+resource "azurerm_monitor_diagnostic_setting" "eventgrid" {
+  name                       = "diag-eventgrid"
+  target_resource_id         = azurerm_eventgrid_system_topic.iothub.id
+  log_analytics_workspace_id = module.monitoring.log_analytics_workspace_id
+
+  enabled_log {
+    category = "DeliveryFailures"
+  }
+
+  metric {
+    category = "AllMetrics"
+  }
+
+  depends_on = [azurerm_eventgrid_system_topic.iothub]
+}
+
+# =============================================================================
 # LAYER 7: RBAC ASSIGNMENTS
 # =============================================================================
 
@@ -305,7 +370,7 @@ module "rbac" {
   telemetry_processor_principal_id   = module.container_apps.telemetry_processor_principal_id
   alert_handler_principal_id         = module.container_apps.alert_handler_principal_id
   event_subscriber_principal_id      = module.container_apps.event_subscriber_principal_id
-  eventgrid_principal_id             = module.event_streaming.eventgrid_system_topic_principal_id
+  eventgrid_principal_id             = azurerm_eventgrid_system_topic.iothub.identity[0].principal_id
 
   depends_on = [
     module.iot_hub,
@@ -314,6 +379,7 @@ module "rbac" {
     module.security,
     module.digital_twins,
     module.stream_analytics,
-    module.container_apps
+    module.container_apps,
+    azurerm_eventgrid_system_topic.iothub
   ]
 }

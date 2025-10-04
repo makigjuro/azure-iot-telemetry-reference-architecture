@@ -51,7 +51,7 @@ resource "azurerm_iothub_route" "telemetry_to_eventhub" {
 # Custom endpoint: Event Hub for telemetry
 resource "azurerm_iothub_endpoint_eventhub" "telemetry" {
   resource_group_name = var.resource_group_name
-  iothub_name         = azurerm_iothub.main.name
+  iothub_id           = azurerm_iothub.main.id
   name                = "telemetry-endpoint"
 
   # Use managed identity for authentication (no connection string needed!)
@@ -65,6 +65,7 @@ resource "azurerm_iothub_endpoint_eventhub" "telemetry" {
 resource "azurerm_iothub_fallback_route" "fallback" {
   resource_group_name = var.resource_group_name
   iothub_name         = azurerm_iothub.main.name
+  endpoint_names      = [azurerm_iothub.main.endpoint[0].name]
 
   enabled = true
   source  = "DeviceMessages"

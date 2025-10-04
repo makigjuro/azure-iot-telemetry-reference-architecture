@@ -34,16 +34,6 @@ output "eventhub_connection_string" {
   sensitive   = true
 }
 
-output "eventgrid_system_topic_id" {
-  description = "Event Grid System Topic ID"
-  value       = azurerm_eventgrid_system_topic.iothub.id
-}
-
-output "eventgrid_system_topic_principal_id" {
-  description = "Event Grid System Topic managed identity principal ID"
-  value       = azurerm_eventgrid_system_topic.iothub.identity[0].principal_id
-}
-
 output "consumer_group_stream_analytics" {
   description = "Stream Analytics consumer group name"
   value       = azurerm_eventhub_consumer_group.stream_analytics.name
