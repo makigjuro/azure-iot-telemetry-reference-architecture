@@ -1,5 +1,5 @@
 # Event Streaming Module - Event Hubs + Event Grid
-# Cost: Basic tier ~$11/month (1 Throughput Unit, 1M events/day)
+# Cost: Standard tier ~$15/month (1 Throughput Unit, 1M events/day)
 
 # Event Hubs Namespace
 resource "azurerm_eventhub_namespace" "main" {
@@ -7,9 +7,9 @@ resource "azurerm_eventhub_namespace" "main" {
   location            = var.location
   resource_group_name = var.resource_group_name
 
-  # Basic tier - cheapest option (1 TU)
+  # Standard tier - required for consumer groups (Stream Analytics needs this)
   # 1 MB/s ingress, 2 MB/s egress, 1 day retention
-  sku                      = "Basic"
+  sku                      = "Standard"
   capacity                 = 1
   auto_inflate_enabled     = false
 
@@ -31,9 +31,9 @@ resource "azurerm_eventhub" "telemetry" {
   namespace_name      = azurerm_eventhub_namespace.main.name
   resource_group_name = var.resource_group_name
 
-  # Basic tier: 1 day retention (max for Basic)
-  partition_count   = 2  # Minimum for Basic
-  message_retention = 1  # Days
+  # Standard tier: 1-7 days retention
+  partition_count   = 2
+  message_retention = 1  # Days (can increase up to 7 if needed)
 }
 
 # Consumer Group: Stream Analytics
@@ -59,7 +59,7 @@ resource "azurerm_eventhub_consumer_group" "container_apps" {
 # Store Event Hubs connection string in Key Vault
 resource "azurerm_key_vault_secret" "eventhub_connection_string" {
   name         = "eventhub-connection-string"
-  value        = azurerm_eventhub_namespace.main.default_primary_connection_string
+  value        = "${azurerm_eventhub_namespace.main.default_primary_connection_string};EntityPath=${azurerm_eventhub.telemetry.name}"
   key_vault_id = var.key_vault_id
 
   depends_on = [var.key_vault_id]

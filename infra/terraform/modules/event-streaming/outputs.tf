@@ -29,8 +29,8 @@ output "eventhub_telemetry_id" {
 }
 
 output "eventhub_connection_string" {
-  description = "Event Hub Namespace connection string"
-  value       = azurerm_eventhub_namespace.main.default_primary_connection_string
+  description = "Event Hub connection string with EntityPath"
+  value       = "${azurerm_eventhub_namespace.main.default_primary_connection_string};EntityPath=${azurerm_eventhub.telemetry.name}"
   sensitive   = true
 }
 

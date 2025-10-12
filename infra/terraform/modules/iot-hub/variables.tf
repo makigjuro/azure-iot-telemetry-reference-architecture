@@ -35,6 +35,12 @@ variable "eventhub_name" {
   type        = string
 }
 
+variable "eventhub_connection_string" {
+  description = "Event Hub connection string for endpoint authentication"
+  type        = string
+  sensitive   = true
+}
+
 variable "key_vault_id" {
   description = "Key Vault ID for storing connection strings"
   type        = string

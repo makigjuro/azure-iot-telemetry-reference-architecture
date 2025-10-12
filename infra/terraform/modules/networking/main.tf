@@ -26,7 +26,7 @@ resource "azurerm_subnet" "application" {
   address_prefixes     = var.subnet_application_prefix
 
   # Enable private endpoints
-  private_endpoint_network_policies_enabled = true
+  private_endpoint_network_policies = "Enabled"
 
   # Service endpoints (cheaper than private endpoints for some scenarios)
   service_endpoints = [

@@ -6,7 +6,9 @@ locals {
   environment   = "dev"
   project_name  = "iot"
   location      = var.location
-  naming_prefix = "${local.project_name}-${local.environment}"
+
+  # Add unique suffix if provided (for globally unique resources like Key Vault, Storage)
+  naming_prefix = var.unique_suffix != "" ? "${local.project_name}-${local.environment}-${var.unique_suffix}" : "${local.project_name}-${local.environment}"
 
   common_tags = {
     Environment = local.environment
@@ -140,10 +142,11 @@ module "iot_hub" {
   enable_public_access = true
 
   # Dependencies
-  storage_connection_string = module.storage.storage_account_primary_connection_string
-  eventhub_endpoint_uri     = module.event_streaming.eventhub_namespace_endpoint
-  eventhub_name             = module.event_streaming.eventhub_telemetry_name
-  key_vault_id              = module.security.key_vault_id
+  storage_connection_string  = module.storage.storage_account_primary_connection_string
+  eventhub_endpoint_uri      = module.event_streaming.eventhub_namespace_endpoint
+  eventhub_name              = module.event_streaming.eventhub_telemetry_name
+  eventhub_connection_string = module.event_streaming.eventhub_connection_string
+  key_vault_id               = module.security.key_vault_id
 
   # Diagnostics
   enable_diagnostics         = true

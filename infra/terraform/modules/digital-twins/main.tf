@@ -15,13 +15,15 @@ resource "azurerm_digital_twins_instance" "main" {
 }
 
 # Event Grid endpoint for twin change events
-resource "azurerm_digital_twins_endpoint_eventgrid" "twin_changes" {
-  name                                 = "twin-changes-endpoint"
-  digital_twins_id                     = azurerm_digital_twins_instance.main.id
-  eventgrid_topic_endpoint             = var.eventgrid_topic_endpoint
-  eventgrid_topic_primary_access_key   = var.eventgrid_topic_primary_key
-  eventgrid_topic_secondary_access_key = var.eventgrid_topic_secondary_key
-}
+# Commented out: Requires a dedicated Event Grid custom topic (not just regional endpoint)
+# Can be enabled later when twin change event routing is needed
+# resource "azurerm_digital_twins_endpoint_eventgrid" "twin_changes" {
+#   name                                 = "twin-changes-endpoint"
+#   digital_twins_id                     = azurerm_digital_twins_instance.main.id
+#   eventgrid_topic_endpoint             = var.eventgrid_topic_endpoint
+#   eventgrid_topic_primary_access_key   = var.eventgrid_topic_primary_key
+#   eventgrid_topic_secondary_access_key = var.eventgrid_topic_secondary_key
+# }
 
 # Data history connection to ADLS (optional, for archiving twin changes)
 # Note: This requires Azure Digital Twins premium tier, commenting out for cost savings

@@ -13,7 +13,7 @@ resource "azurerm_storage_account" "adls" {
   is_hns_enabled           = true
 
   # Disable features to save cost
-  enable_https_traffic_only       = true
+  https_traffic_only_enabled      = true
   min_tls_version                 = "TLS1_2"
   allow_nested_items_to_be_public = false
 
@@ -120,11 +120,29 @@ resource "azurerm_storage_management_policy" "lifecycle" {
   }
 }
 
-# Diagnostic settings
+# Diagnostic settings for Storage Account
+# Note: Storage Account level only supports metrics, not logs
+# Logs must be configured on individual services (blob, table, queue, file)
 resource "azurerm_monitor_diagnostic_setting" "adls" {
   count                      = var.enable_diagnostics ? 1 : 0
   name                       = "diag-adls"
   target_resource_id         = azurerm_storage_account.adls.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
+
+  metric {
+    category = "Transaction"
+  }
+
+  metric {
+    category = "Capacity"
+  }
+}
+
+# Diagnostic settings for Blob Service (for read/write/delete logs)
+resource "azurerm_monitor_diagnostic_setting" "adls_blob" {
+  count                      = var.enable_diagnostics ? 1 : 0
+  name                       = "diag-adls-blob"
+  target_resource_id         = "${azurerm_storage_account.adls.id}/blobServices/default"
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
   enabled_log {
@@ -135,7 +153,15 @@ resource "azurerm_monitor_diagnostic_setting" "adls" {
     category = "StorageWrite"
   }
 
+  enabled_log {
+    category = "StorageDelete"
+  }
+
   metric {
     category = "Transaction"
+  }
+
+  metric {
+    category = "Capacity"
   }
 }

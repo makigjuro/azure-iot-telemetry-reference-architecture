@@ -114,9 +114,11 @@ resource "azurerm_stream_analytics_output_blob" "adls" {
   # Use managed identity for authentication
   authentication_mode = "Msi"
 
-  # Serialization (Parquet for better compression and analytics)
+  # Serialization (JSON instead of Parquet due to Terraform provider limitations)
   serialization {
-    type = "Parquet"
+    type     = "Json"
+    encoding = "UTF8"
+    format   = "LineSeparated"
   }
 }
 

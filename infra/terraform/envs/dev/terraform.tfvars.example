@@ -7,6 +7,14 @@
 location = "eastus"  # Recommended: eastus, westus2, or northeurope (cheapest)
 
 # =============================================================================
+# UNIQUE SUFFIX (Required for globally unique resources)
+# =============================================================================
+# Add a 3-8 character suffix to avoid naming conflicts with Key Vault, Storage, etc.
+# Use lowercase letters and numbers only
+# Example: your initials + random numbers like "abc123" or "mjg456"
+unique_suffix = "mg123"  # CHANGE THIS to something unique to you!
+
+# =============================================================================
 # DATABASE CREDENTIALS
 # =============================================================================
 postgres_admin_username = "psqladmin"

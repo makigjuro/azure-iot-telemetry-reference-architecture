@@ -7,6 +7,17 @@ variable "location" {
   default     = "eastus"  # Cheapest region for most services
 }
 
+variable "unique_suffix" {
+  description = "Unique suffix for globally unique resource names (e.g., Key Vault, Storage)"
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = var.unique_suffix == "" || can(regex("^[a-z0-9]{3,8}$", var.unique_suffix))
+    error_message = "Unique suffix must be 3-8 lowercase alphanumeric characters, or empty."
+  }
+}
+
 # =============================================================================
 # DATABASE CREDENTIALS
 # =============================================================================

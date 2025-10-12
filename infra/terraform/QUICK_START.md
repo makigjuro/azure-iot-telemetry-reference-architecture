@@ -17,13 +17,16 @@ cd infra/terraform/envs/dev
 cp terraform.tfvars.example terraform.tfvars
 ```
 
-### **3. Set PostgreSQL Password**
-Edit `terraform.tfvars` and change the password:
+### **3. Configure Variables**
+Edit `terraform.tfvars` and change these values:
 ```hcl
-postgres_admin_password = "YourSecurePassword123!"
+unique_suffix = "mg123"  # Change to something unique (3-8 chars, lowercase)
+postgres_admin_password = "YourSecurePassword123!"  # Change this!
 ```
 
-**Requirements:** Minimum 8 characters, include uppercase, lowercase, numbers, special chars
+**Requirements:**
+- Unique suffix: 3-8 characters, lowercase letters and numbers only
+- Password: Minimum 8 characters, include uppercase, lowercase, numbers, special chars
 
 ### **4. Deploy**
 ```bash
