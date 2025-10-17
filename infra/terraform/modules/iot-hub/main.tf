@@ -54,22 +54,14 @@ resource "azurerm_iothub_endpoint_eventhub" "telemetry" {
   iothub_id           = azurerm_iothub.main.id
   name                = "telemetry-endpoint"
 
-  # Use managed identity for authentication (no connection string needed!)
-  authentication_type     = "identityBased"
-  identity_id             = azurerm_iothub.main.identity[0].principal_id
-  endpoint_uri            = var.eventhub_endpoint_uri
-  entity_path             = var.eventhub_name
+  # Use connection string authentication (identityBased requires RBAC to be set up first)
+  # Connection string already includes endpoint URI and entity path
+  authentication_type = "keyBased"
+  connection_string   = var.eventhub_connection_string
 }
 
-# Fallback route (to built-in endpoint)
-resource "azurerm_iothub_fallback_route" "fallback" {
-  resource_group_name = var.resource_group_name
-  iothub_name         = azurerm_iothub.main.name
-  endpoint_names      = [azurerm_iothub.main.endpoint[0].name]
-
-  enabled = true
-  source  = "DeviceMessages"
-}
+# NOTE: Fallback route not needed since we route all messages (condition = "true") to Event Hubs
+# The fallback route only handles messages that don't match any custom routes
 
 # Device Provisioning Service (DPS)
 resource "azurerm_iothub_dps" "main" {

@@ -10,6 +10,9 @@ resource "azurerm_postgresql_flexible_server" "main" {
   sku_name   = "B_Standard_B1ms"
   storage_mb = 32768  # 32GB minimum
 
+  # Availability zone (keep existing zone)
+  zone = "2"
+
   # PostgreSQL version
   version = "16"
 
@@ -20,6 +23,9 @@ resource "azurerm_postgresql_flexible_server" "main" {
   # VNet integration (delegated subnet)
   delegated_subnet_id = var.delegated_subnet_id
   private_dns_zone_id = azurerm_private_dns_zone.postgres.id
+
+  # Disable public access when using VNet integration
+  public_network_access_enabled = false
 
   # Backup configuration
   backup_retention_days        = 7   # Minimum
@@ -66,13 +72,9 @@ resource "azurerm_postgresql_flexible_server_database" "iot_metadata" {
   charset   = "utf8"
 }
 
-# Firewall rule: Allow Azure services (for managed identities)
-resource "azurerm_postgresql_flexible_server_firewall_rule" "allow_azure_services" {
-  name             = "AllowAzureServices"
-  server_id        = azurerm_postgresql_flexible_server.main.id
-  start_ip_address = "0.0.0.0"
-  end_ip_address   = "0.0.0.0"
-}
+# NOTE: Firewall rules are NOT compatible with VNet integration
+# Since we use delegated_subnet_id for VNet integration, we cannot use firewall rules
+# Access is controlled via VNet/subnet instead of public firewall rules
 
 # Configuration: Enable pgcrypto extension (for UUIDs)
 resource "azurerm_postgresql_flexible_server_configuration" "extensions" {

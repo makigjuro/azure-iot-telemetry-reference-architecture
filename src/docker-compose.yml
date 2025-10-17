@@ -1,0 +1,75 @@
+services:
+  # PostgreSQL database for device metadata and alerts
+  postgres:
+    image: postgres:17-alpine
+    container_name: iot-postgres
+    environment:
+      POSTGRES_DB: iot_telemetry
+      POSTGRES_USER: iotuser
+      POSTGRES_PASSWORD: iotpass123!
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U iotuser -d iot_telemetry"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Azurite - Azure Storage emulator (ADLS Gen2 simulation)
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite:latest
+    container_name: iot-azurite
+    command: "azurite --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0 --loose"
+    ports:
+      - "10000:10000"  # Blob service
+      - "10001:10001"  # Queue service
+      - "10002:10002"  # Table service
+    volumes:
+      - azurite-data:/data
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "10000"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Seq - Structured log viewer
+  seq:
+    image: datalust/seq:latest
+    container_name: iot-seq
+    environment:
+      ACCEPT_EULA: Y
+    ports:
+      - "5341:80"      # Web UI
+      - "5342:5341"    # Ingestion
+    volumes:
+      - seq-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # pgAdmin - PostgreSQL web interface (optional)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: iot-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@iot.local
+      PGADMIN_DEFAULT_PASSWORD: admin123!
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres-data:
+  azurite-data:
+  seq-data:
+
+networks:
+  default:
+    name: iot-telemetry-network
