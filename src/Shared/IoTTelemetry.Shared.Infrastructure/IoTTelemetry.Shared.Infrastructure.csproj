@@ -11,4 +11,10 @@
     <NoWarn>$(NoWarn);CA1000;CA1716;RCS1194</NoWarn>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Polly" />
+    <PackageReference Include="Polly.Extensions" />
+  </ItemGroup>
+
 </Project>

@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTTelemetry.Domain.Tests", "tests\IoTTelemetry.Domain.Tests\IoTTelemetry.Domain.Tests.csproj", "{52160871-3803-44D8-B530-EA4003221B29}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTTelemetry.Shared.Infrastructure.Tests", "tests\IoTTelemetry.Shared.Infrastructure.Tests\IoTTelemetry.Shared.Infrastructure.Tests.csproj", "{1953625B-9712-4CBF-A614-EFB84B7691F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,18 @@ Global
 		{52160871-3803-44D8-B530-EA4003221B29}.Release|x64.Build.0 = Release|Any CPU
 		{52160871-3803-44D8-B530-EA4003221B29}.Release|x86.ActiveCfg = Release|Any CPU
 		{52160871-3803-44D8-B530-EA4003221B29}.Release|x86.Build.0 = Release|Any CPU
+		{1953625B-9712-4CBF-A614-EFB84B7691F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1953625B-9712-4CBF-A614-EFB84B7691F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1953625B-9712-4CBF-A614-EFB84B7691F2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1953625B-9712-4CBF-A614-EFB84B7691F2}.Debug|x64.Build.0 = Debug|Any CPU
+		{1953625B-9712-4CBF-A614-EFB84B7691F2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1953625B-9712-4CBF-A614-EFB84B7691F2}.Debug|x86.Build.0 = Debug|Any CPU
+		{1953625B-9712-4CBF-A614-EFB84B7691F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1953625B-9712-4CBF-A614-EFB84B7691F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1953625B-9712-4CBF-A614-EFB84B7691F2}.Release|x64.ActiveCfg = Release|Any CPU
+		{1953625B-9712-4CBF-A614-EFB84B7691F2}.Release|x64.Build.0 = Release|Any CPU
+		{1953625B-9712-4CBF-A614-EFB84B7691F2}.Release|x86.ActiveCfg = Release|Any CPU
+		{1953625B-9712-4CBF-A614-EFB84B7691F2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,5 +81,6 @@ Global
 		{07B32DFE-C96B-407E-B037-498325056C50} = {4F52FD11-658E-A102-6CD3-7D7C16FFA15B}
 		{F8D8B99E-4132-4C29-98F1-255BD10D8317} = {4F52FD11-658E-A102-6CD3-7D7C16FFA15B}
 		{52160871-3803-44D8-B530-EA4003221B29} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{1953625B-9712-4CBF-A614-EFB84B7691F2} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 EndGlobal
