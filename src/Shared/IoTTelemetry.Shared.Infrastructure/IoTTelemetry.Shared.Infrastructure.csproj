@@ -7,7 +7,8 @@
     <!-- Suppress analyzers for intentional design decisions -->
     <!-- CA1000: Static factory methods in Result<T> pattern -->
     <!-- CA1716: "Shared" in namespace and "Error" type name are acceptable -->
-    <NoWarn>$(NoWarn);CA1000;CA1716</NoWarn>
+    <!-- RCS1194: Standard exception constructors not needed (not using serialization) -->
+    <NoWarn>$(NoWarn);CA1000;CA1716;RCS1194</NoWarn>
   </PropertyGroup>
 
 </Project>
