@@ -8,7 +8,8 @@
     <!-- CA1000: Static factory methods in Result<T> pattern -->
     <!-- CA1716: "Shared" in namespace and "Error" type name are acceptable -->
     <!-- RCS1194: Standard exception constructors not needed (not using serialization) -->
-    <NoWarn>$(NoWarn);CA1000;CA1716;RCS1194</NoWarn>
+    <!-- CA1848: LoggerMessage delegates - simplified logging for resilience callbacks -->
+    <NoWarn>$(NoWarn);CA1000;CA1716;RCS1194;CA1848</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
