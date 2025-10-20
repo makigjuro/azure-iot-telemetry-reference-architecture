@@ -53,3 +53,5 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 infra/terraform/envs/dev/tfplan
+
+claude.md
