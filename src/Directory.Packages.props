@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup Label="Messaging - Wolverine">
-    <PackageVersion Include="WolverineFx" Version="4.4.3" />
-    <PackageVersion Include="WolverineFx.Http" Version="4.4.3" />
+    <PackageVersion Include="WolverineFx" Version="4.5.0" />
+    <PackageVersion Include="WolverineFx.Http" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup Label="Validation and Mapping">

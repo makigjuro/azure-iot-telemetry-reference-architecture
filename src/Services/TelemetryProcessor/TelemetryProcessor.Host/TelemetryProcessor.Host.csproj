@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-TelemetryProcessor.Host-c273f17f-10ee-45a8-9a21-d815f1aefa0a</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Serilog.Extensions.Hosting" />
+    <PackageReference Include="Serilog.Settings.Configuration" />
+    <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Serilog.Enrichers.Environment" />
+    <PackageReference Include="Serilog.Enrichers.Thread" />
+    <PackageReference Include="WolverineFx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\IoTTelemetry.Shared.Infrastructure\IoTTelemetry.Shared.Infrastructure.csproj" />
+    <ProjectReference Include="..\TelemetryProcessor.Application\TelemetryProcessor.Application.csproj" />
+    <ProjectReference Include="..\TelemetryProcessor.Infrastructure\TelemetryProcessor.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
