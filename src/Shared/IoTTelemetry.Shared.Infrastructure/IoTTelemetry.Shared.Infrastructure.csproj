@@ -9,7 +9,10 @@
     <!-- CA1716: "Shared" in namespace and "Error" type name are acceptable -->
     <!-- RCS1194: Standard exception constructors not needed (not using serialization) -->
     <!-- CA1848: LoggerMessage delegates - simplified logging for resilience callbacks -->
-    <NoWarn>$(NoWarn);CA1000;CA1716;RCS1194;CA1848</NoWarn>
+    <!-- CA1305: Serilog console formatting doesn't need IFormatProvider -->
+    <!-- S1075: Seq URL defaults are acceptable -->
+    <!-- S3267: LINQ simplification would reduce readability in enricher -->
+    <NoWarn>$(NoWarn);CA1000;CA1716;RCS1194;CA1848;CA1305;S1075;S3267</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +24,16 @@
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
     <PackageReference Include="OpenTelemetry.Exporter.Console" />
     <PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore" />
+    <PackageReference Include="Azure.Identity" />
+    <PackageReference Include="Azure.Core" />
+    <PackageReference Include="Serilog" />
+    <PackageReference Include="Serilog.Extensions.Hosting" />
+    <PackageReference Include="Serilog.Settings.Configuration" />
+    <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Serilog.Sinks.Seq" />
+    <PackageReference Include="Serilog.Enrichers.Environment" />
+    <PackageReference Include="Serilog.Enrichers.Thread" />
+    <PackageReference Include="Serilog.Formatting.Compact" />
   </ItemGroup>
 
 </Project>
