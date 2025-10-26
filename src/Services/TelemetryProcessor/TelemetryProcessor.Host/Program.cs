@@ -2,7 +2,6 @@ using IoTTelemetry.Shared.Infrastructure.Observability;
 using Serilog;
 using TelemetryProcessor.Application.Ports;
 using TelemetryProcessor.Application.Validators;
-using TelemetryProcessor.Host;
 using TelemetryProcessor.Infrastructure.Database;
 using TelemetryProcessor.Infrastructure.EventHubs;
 using TelemetryProcessor.Infrastructure.Storage;
