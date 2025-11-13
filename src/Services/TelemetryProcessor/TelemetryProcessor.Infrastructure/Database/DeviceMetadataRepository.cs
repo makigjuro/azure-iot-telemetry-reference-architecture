@@ -1,4 +1,5 @@
 using IoTTelemetry.Domain.ValueObjects;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TelemetryProcessor.Application.Ports;
 
@@ -6,33 +7,55 @@ namespace TelemetryProcessor.Infrastructure.Database;
 
 /// <summary>
 /// Repository for retrieving device metadata from PostgreSQL.
-/// For now, returns mock data. Will be implemented with EF Core later.
 /// </summary>
 public sealed class DeviceMetadataRepository : IDeviceMetadataRepository
 {
+    private readonly IoTTelemetryDbContext _dbContext;
     private readonly ILogger<DeviceMetadataRepository> _logger;
 
-    public DeviceMetadataRepository(ILogger<DeviceMetadataRepository> logger)
+    public DeviceMetadataRepository(
+        IoTTelemetryDbContext dbContext,
+        ILogger<DeviceMetadataRepository> logger)
     {
+        _dbContext = dbContext;
         _logger = logger;
     }
 
-    public Task<Dictionary<string, string>?> GetMetadataAsync(
+    public async Task<Dictionary<string, string>?> GetMetadataAsync(
         DeviceId deviceId,
         CancellationToken cancellationToken = default)
     {
         _logger.LogDebug("Fetching metadata for device {DeviceId}", deviceId);
 
-        // TODO: Implement actual EF Core query when device schema is ready
-        // For now, return mock metadata
-        var metadata = new Dictionary<string, string>
+        var device = await _dbContext.Devices
+            .AsNoTracking()
+            .FirstOrDefaultAsync(d => d.Id == deviceId, cancellationToken);
+
+        if (device == null)
         {
-            ["location"] = "Warehouse-A",
-            ["model"] = "IoT-Sensor-v2",
-            ["manufacturer"] = "Contoso",
-            ["firmwareVersion"] = "1.2.3"
+            _logger.LogWarning("Device {DeviceId} not found in database", deviceId);
+            return null;
+        }
+
+        // Build metadata dictionary from device properties
+        var metadata = new Dictionary<string, string>(device.Properties)
+        {
+            ["deviceName"] = device.Name,
+            ["deviceType"] = device.Type,
+            ["deviceStatus"] = device.Status.ToString()
         };
 
-        return Task.FromResult<Dictionary<string, string>?>(metadata);
+        // Add location if available
+        if (!string.IsNullOrWhiteSpace(device.Location))
+        {
+            metadata["location"] = device.Location;
+        }
+
+        _logger.LogDebug(
+            "Retrieved {MetadataCount} metadata fields for device {DeviceId}",
+            metadata.Count,
+            deviceId);
+
+        return metadata;
     }
 }
