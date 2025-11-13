@@ -35,6 +35,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelemetryProcessor.Tests.Integration", "tests\TelemetryProcessor.Tests.Integration\TelemetryProcessor.Tests.Integration.csproj", "{05B6BE51-81FE-40FF-8AD8-A57A7CFD2A54}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -141,6 +143,18 @@ Global
 		{C50F01F0-2AD9-457D-A46F-03521F5CA5B3}.Release|x64.Build.0 = Release|Any CPU
 		{C50F01F0-2AD9-457D-A46F-03521F5CA5B3}.Release|x86.ActiveCfg = Release|Any CPU
 		{C50F01F0-2AD9-457D-A46F-03521F5CA5B3}.Release|x86.Build.0 = Release|Any CPU
+		{05B6BE51-81FE-40FF-8AD8-A57A7CFD2A54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05B6BE51-81FE-40FF-8AD8-A57A7CFD2A54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05B6BE51-81FE-40FF-8AD8-A57A7CFD2A54}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{05B6BE51-81FE-40FF-8AD8-A57A7CFD2A54}.Debug|x64.Build.0 = Debug|Any CPU
+		{05B6BE51-81FE-40FF-8AD8-A57A7CFD2A54}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{05B6BE51-81FE-40FF-8AD8-A57A7CFD2A54}.Debug|x86.Build.0 = Debug|Any CPU
+		{05B6BE51-81FE-40FF-8AD8-A57A7CFD2A54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05B6BE51-81FE-40FF-8AD8-A57A7CFD2A54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05B6BE51-81FE-40FF-8AD8-A57A7CFD2A54}.Release|x64.ActiveCfg = Release|Any CPU
+		{05B6BE51-81FE-40FF-8AD8-A57A7CFD2A54}.Release|x64.Build.0 = Release|Any CPU
+		{05B6BE51-81FE-40FF-8AD8-A57A7CFD2A54}.Release|x86.ActiveCfg = Release|Any CPU
+		{05B6BE51-81FE-40FF-8AD8-A57A7CFD2A54}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -155,5 +169,6 @@ Global
 		{8E83D731-DD2C-4397-9235-B97C93F2E821} = {855F9836-0C1D-D980-4DFD-7FAB3574BA1C}
 		{E0A9FCFD-61B6-4366-B4A5-D120238A0114} = {855F9836-0C1D-D980-4DFD-7FAB3574BA1C}
 		{C50F01F0-2AD9-457D-A46F-03521F5CA5B3} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{05B6BE51-81FE-40FF-8AD8-A57A7CFD2A54} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 EndGlobal

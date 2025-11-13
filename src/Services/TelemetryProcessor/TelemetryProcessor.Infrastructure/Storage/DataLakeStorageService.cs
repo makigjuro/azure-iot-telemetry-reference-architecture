@@ -32,6 +32,19 @@ public sealed class DataLakeStorageService : ITelemetryStorage
         _blobServiceClient = new BlobServiceClient(serviceUri, new DefaultAzureCredential());
     }
 
+    /// <summary>
+    /// Constructor for testing with custom BlobServiceClient.
+    /// </summary>
+    public DataLakeStorageService(
+        DataLakeOptions options,
+        BlobServiceClient blobServiceClient,
+        ILogger<DataLakeStorageService> logger)
+    {
+        _options = options;
+        _blobServiceClient = blobServiceClient;
+        _logger = logger;
+    }
+
     public async Task StoreBronzeAsync(
         TelemetryReading reading,
         CancellationToken cancellationToken = default)
