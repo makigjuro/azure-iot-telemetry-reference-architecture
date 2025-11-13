@@ -1,4 +1,5 @@
 using IoTTelemetry.Shared.Infrastructure.Observability;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using TelemetryProcessor.Application.Ports;
 using TelemetryProcessor.Application.Validators;
@@ -36,12 +37,26 @@ try
             services.Configure<DataLakeOptions>(
                 context.Configuration.GetSection(DataLakeOptions.SectionName));
 
+            // Register EF Core DbContext
+            services.AddDbContext<IoTTelemetryDbContext>(options =>
+            {
+                var connectionString = context.Configuration.GetConnectionString("PostgreSQL");
+                options.UseNpgsql(connectionString, npgsqlOptions =>
+                {
+                    npgsqlOptions.MigrationsHistoryTable("__efmigrations_history", "telemetry");
+                    npgsqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 3,
+                        maxRetryDelay: TimeSpan.FromSeconds(30),
+                        errorCodesToAdd: null);
+                });
+            });
+
             // Register Application Services (Ports)
             services.AddSingleton<ITelemetryValidator, TelemetryValidator>();
 
             // Register Infrastructure Services (Adapters)
             services.AddSingleton<ITelemetryStorage, DataLakeStorageService>();
-            services.AddSingleton<IDeviceMetadataRepository, DeviceMetadataRepository>();
+            services.AddScoped<IDeviceMetadataRepository, DeviceMetadataRepository>();
             services.AddSingleton<IEventHubConsumer, EventHubConsumerService>();
 
             // Register Event Hub Consumer as Background Service
