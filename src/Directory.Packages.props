@@ -2,7 +2,6 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
-
   <ItemGroup Label="Framework">
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
@@ -10,25 +9,21 @@
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Options" Version="9.0.0" />
   </ItemGroup>
-
   <ItemGroup Label="Messaging - Wolverine">
     <PackageVersion Include="WolverineFx" Version="4.5.0" />
     <PackageVersion Include="WolverineFx.Http" Version="4.5.0" />
   </ItemGroup>
-
   <ItemGroup Label="Validation and Mapping">
     <PackageVersion Include="FluentValidation" Version="11.11.0" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
     <PackageVersion Include="Riok.Mapperly" Version="4.2.0" />
   </ItemGroup>
-
   <ItemGroup Label="Data Access">
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.2" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0" />
     <PackageVersion Include="Dapper" Version="2.1.35" />
   </ItemGroup>
-
   <ItemGroup Label="Azure SDKs">
     <PackageVersion Include="Azure.Core" Version="1.46.1" />
     <PackageVersion Include="Azure.Identity" Version="1.14.1" />
@@ -38,9 +33,8 @@
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="7.18.2" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="12.24.0" />
     <PackageVersion Include="Azure.DigitalTwins.Core" Version="1.5.0" />
-    <PackageVersion Include="Microsoft.Azure.Devices" Version="1.42.2" />
+    <PackageVersion Include="Microsoft.Azure.Devices" Version="1.40.0" />
   </ItemGroup>
-
   <ItemGroup Label="Observability">
     <PackageVersion Include="OpenTelemetry" Version="1.12.0" />
     <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0" />
@@ -57,18 +51,15 @@
     <PackageVersion Include="Serilog.Enrichers.Thread" Version="4.0.0" />
     <PackageVersion Include="Serilog.Formatting.Compact" Version="3.0.0" />
   </ItemGroup>
-
   <ItemGroup Label="Resilience">
     <PackageVersion Include="Polly" Version="8.5.0" />
     <PackageVersion Include="Polly.Extensions" Version="8.5.0" />
   </ItemGroup>
-
   <ItemGroup Label="Web">
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="7.2.0" />
     <PackageVersion Include="AspNetCoreRateLimit" Version="5.0.0" />
   </ItemGroup>
-
   <ItemGroup Label="Testing">
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
@@ -83,7 +74,6 @@
     <PackageVersion Include="NetArchTest.Rules" Version="1.3.2" />
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
   </ItemGroup>
-
   <ItemGroup Label="Code Quality">
     <PackageVersion Include="Roslynator.Analyzers" Version="4.12.9" />
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.4.0.108396" />

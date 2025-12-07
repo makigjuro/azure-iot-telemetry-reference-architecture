@@ -5,6 +5,7 @@ using Azure.Identity;
 using Azure.Messaging.ServiceBus;
 using IoTTelemetry.Domain.Entities;
 using IoTTelemetry.Domain.ValueObjects;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Wolverine;
@@ -14,7 +15,7 @@ namespace AlertHandler.Infrastructure.ServiceBus;
 /// <summary>
 /// Service Bus consumer that processes alert messages from Stream Analytics.
 /// </summary>
-public sealed class ServiceBusConsumerService : IServiceBusConsumer, IAsyncDisposable
+public sealed class ServiceBusConsumerService : BackgroundService, IServiceBusConsumer
 {
     private readonly ServiceBusClient _client;
     private readonly ServiceBusProcessor _processor;
@@ -49,18 +50,31 @@ public sealed class ServiceBusConsumerService : IServiceBusConsumer, IAsyncDispo
         _processor.ProcessErrorAsync += ProcessErrorAsync;
     }
 
-    public async Task StartAsync(CancellationToken cancellationToken = default)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("Starting Service Bus consumer");
-        await _processor.StartProcessingAsync(cancellationToken);
-        _logger.LogInformation("Service Bus consumer started");
+        _logger.LogInformation("Service Bus consumer is starting");
+
+        await _processor.StartProcessingAsync(stoppingToken);
+
+        _logger.LogInformation("Service Bus consumer started successfully");
+
+        // Keep the service running until cancellation is requested
+        try
+        {
+            await Task.Delay(Timeout.Infinite, stoppingToken);
+        }
+        catch (OperationCanceledException)
+        {
+            // Expected when stopping
+        }
     }
 
-    public async Task StopAsync(CancellationToken cancellationToken = default)
+    public override async Task StopAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("Stopping Service Bus consumer");
         await _processor.StopProcessingAsync(cancellationToken);
         _logger.LogInformation("Service Bus consumer stopped");
+        await base.StopAsync(cancellationToken);
     }
 
     private async Task ProcessMessageAsync(ProcessMessageEventArgs args)
@@ -83,10 +97,10 @@ public sealed class ServiceBusConsumerService : IServiceBusConsumer, IAsyncDispo
 
             // Reconstruct Alert domain entity
             var alert = Alert.Create(
-                DeviceId.From(alertData.DeviceId),
+                DeviceId.Create(alertData.DeviceId),
                 ParseSeverity(alertData.Severity),
                 alertData.Message,
-                Timestamp.FromDateTimeOffset(alertData.Timestamp),
+                Timestamp.Create(alertData.Timestamp),
                 alertData.Metadata);
 
             // Publish to Wolverine message bus
@@ -140,10 +154,11 @@ public sealed class ServiceBusConsumerService : IServiceBusConsumer, IAsyncDispo
         };
     }
 
-    public async ValueTask DisposeAsync()
+    public override void Dispose()
     {
-        await _processor.DisposeAsync();
-        await _client.DisposeAsync();
+        _processor?.DisposeAsync().AsTask().GetAwaiter().GetResult();
+        _client?.DisposeAsync().AsTask().GetAwaiter().GetResult();
+        base.Dispose();
     }
 
     /// <summary>

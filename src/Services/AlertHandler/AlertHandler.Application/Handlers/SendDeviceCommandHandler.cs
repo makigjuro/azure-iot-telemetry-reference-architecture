@@ -67,7 +67,7 @@ public sealed class SendDeviceCommandHandler
             command.DeviceId,
             IoTTelemetry.Domain.ValueObjects.AlertSeverity.Warning, // Default, should be from original alert
             command.Payload.TryGetValue("message", out var msg) ? msg.ToString()! : "Alert",
-            IoTTelemetry.Domain.ValueObjects.Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow)
+            IoTTelemetry.Domain.ValueObjects.Timestamp.Now()
         );
 
         // Cascade to audit

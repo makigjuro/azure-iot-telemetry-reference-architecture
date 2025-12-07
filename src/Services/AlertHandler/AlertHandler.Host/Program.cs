@@ -65,8 +65,7 @@ try
 
             // Add Health Checks
             services.AddHealthChecks()
-                .AddCheck("self", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy())
-                .AddDbContextCheck<IoTTelemetryDbContext>("postgresql");
+                .AddCheck("self", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy());
         });
 
     var host = builder.Build();

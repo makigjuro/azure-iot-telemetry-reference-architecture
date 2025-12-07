@@ -65,10 +65,9 @@ public sealed class DeviceCommandSender : IDeviceCommandSender, IAsyncDisposable
             message.Properties["timestamp"] = DateTimeOffset.UtcNow.ToString("O");
 
             // Send command with timeout
-            using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-            cts.CancelAfter(TimeSpan.FromSeconds(_options.CommandTimeoutSeconds));
+            var timeout = TimeSpan.FromSeconds(_options.CommandTimeoutSeconds);
 
-            await _serviceClient.SendAsync(deviceId.Value, message, cts.Token);
+            await _serviceClient.SendAsync(deviceId.Value, message, timeout);
 
             _logger.LogInformation(
                 "C2D command '{CommandName}' sent successfully to device {DeviceId}",
@@ -77,9 +76,10 @@ public sealed class DeviceCommandSender : IDeviceCommandSender, IAsyncDisposable
 
             return true;
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException ex)
         {
             _logger.LogWarning(
+                ex,
                 "C2D command '{CommandName}' to device {DeviceId} timed out",
                 commandName,
                 deviceId);

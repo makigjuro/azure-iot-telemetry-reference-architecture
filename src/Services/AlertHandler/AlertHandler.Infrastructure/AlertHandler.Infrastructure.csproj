@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Shared\IoTTelemetry.Shared.Infrastructure\IoTTelemetry.Shared.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\TelemetryProcessor\TelemetryProcessor.Infrastructure\TelemetryProcessor.Infrastructure.csproj" />
     <ProjectReference Include="..\AlertHandler.Application\AlertHandler.Application.csproj" />
   </ItemGroup>
 
