@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-AlertHandler.Host-a8f3e21d-9bcc-4fa9-8d32-e927c3bdf1b2</UserSecretsId>
+    <NoWarn>CA1848;CA1869;CA1305;S6580;S1135;S1006;S2139;NU1608;CA1861</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="Serilog.Extensions.Hosting" />
+    <PackageReference Include="Serilog.Settings.Configuration" />
+    <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Serilog.Enrichers.Environment" />
+    <PackageReference Include="Serilog.Enrichers.Thread" />
+    <PackageReference Include="WolverineFx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\IoTTelemetry.Shared.Infrastructure\IoTTelemetry.Shared.Infrastructure.csproj" />
+    <ProjectReference Include="..\AlertHandler.Application\AlertHandler.Application.csproj" />
+    <ProjectReference Include="..\AlertHandler.Infrastructure\AlertHandler.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

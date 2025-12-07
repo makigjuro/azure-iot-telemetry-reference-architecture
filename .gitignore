@@ -55,3 +55,4 @@ nunit-*.xml
 infra/terraform/envs/dev/tfplan
 
 claude.md
+.claude/settings.json
